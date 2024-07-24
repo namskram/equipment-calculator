@@ -6,8 +6,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.imageio.ImageIO;
 
+import namskram.classes.Amplifier;
+import namskram.classes.CharacterType;
+import namskram.classes.DamageDealer;
+import namskram.classes.Specialist;
+import namskram.classes.Sustain;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
@@ -20,6 +26,7 @@ public class Extracter {
         int newWidth = 600;
         int newHeight = 500;
         
+        // Resize the image so Tesseract can read it more accurately
         BufferedImage originalImage = ImageIO.read(imageFile);
 
         // Create a new BufferedImage for resized image
@@ -81,6 +88,29 @@ public class Extracter {
             }
         }
         return filteredText.toString().trim();
+    }
+
+    public static String classChecker(String charName) {
+        CharacterType tempDD = new DamageDealer(charName);
+        if (tempDD.getCharacters().contains(charName)) {
+            return "DamageDealer";
+        }
+        
+        CharacterType tempSpec = new Specialist(charName);
+        if (tempSpec.getCharacters().contains(charName)) {
+            return "Specialist";
+        }
+
+        CharacterType tempAmp = new Amplifier(charName);
+        if (tempAmp.getCharacters().contains(charName)) {
+            return "Amplifier";
+        }
+
+        CharacterType tempSus = new Sustain(charName);
+        if (tempSus.getCharacters().contains(charName)) {
+            return "Sustain";
+        }
+        return "No such character";
     }
 
 }
