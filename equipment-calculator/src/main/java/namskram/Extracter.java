@@ -4,6 +4,9 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +63,11 @@ public class Extracter {
             System.out.println(filteredText);
             System.out.println();
 
+            Map<String, Double> vals = filteredTextToDictionary(filteredText);
+            // Ignore main stats, assuming BIS already
+            Map<String, Double> newVals = removeFirstPair(vals);
+            System.out.println("test: " + newVals);
+
         } catch (TesseractException e) {
             System.err.println("Error during OCR: " + e.getMessage());
         }
@@ -111,6 +119,45 @@ public class Extracter {
             return "Sustain";
         }
         return "No such character";
+    }
+
+    // Method to convert filtered text to a dictionary
+    public static Map<String, Double> filteredTextToDictionary(String filteredText) {
+        Map<String, Double> resultMap = new LinkedHashMap<>(); // Using LinkedHashMap to maintain order
+        String[] lines = filteredText.split("\\n");
+        
+        for (String line : lines) {
+            // System.out.println("Processing line: " + line); // Debug print
+            int lastSpaceIndex = line.lastIndexOf(' ');
+            if (lastSpaceIndex == -1) {
+                System.err.println("No space found in line: " + line); // Debug print
+                continue;
+            }
+            String key = line.substring(0, lastSpaceIndex).trim();
+            String valueStr = line.substring(lastSpaceIndex + 1).replace("%", ""); // Remove percentage sign if present
+            try {
+                double value = Double.parseDouble(valueStr);
+                resultMap.put(key, value);
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid number format for: " + valueStr);
+            }
+        }
+        
+        return resultMap;
+    }
+
+    // Method to create a new dictionary without the first pair
+    public static Map<String, Double> removeFirstPair(Map<String, Double> originalMap) {
+        Map<String, Double> newMap = new LinkedHashMap<>(); // Using LinkedHashMap to maintain order
+        boolean firstPair = true;
+        for (Map.Entry<String, Double> entry : originalMap.entrySet()) {
+            if (firstPair) {
+                firstPair = false; // Skip the first entry
+                continue;
+            }
+            newMap.put(entry.getKey(), entry.getValue());
+        }
+        return newMap;
     }
 
 }

@@ -19,6 +19,9 @@ public class App
             while (true) {
                 System.out.print("Enter character name: ");
                 String charName = scnr.nextLine();
+                if (charName.equals("q")) {
+                    break;
+                }
                 String classType = classChecker(charName);
                 String className = "namskram.classes." + classType;
                 Class cl = Class.forName(className);
@@ -32,7 +35,7 @@ public class App
                 }
                 
                 String filePath = "C:/Users/Brandon Du/OneDrive/Pictures/" + fileName + ".png";
-                System.out.println("Analyzing " + fileName);
+                System.out.println("Analyzing " + fileName + " for " + charName);
                 Extracter.ExtractTextAndNumbers(filePath);
                 System.out.println("Enter \"q\" to quit");
             }
