@@ -7,18 +7,44 @@ import java.util.List;
 import java.util.Map;
 
 public class DamageDealer extends CharacterType {
-    private String name;
+    private final String name;
+    private final Map<String, Double> avgRolls = new HashMap<String, Double>() {{
+        put("SPD", 2.3);
+        put("HP", 38.0);
+        put("ATK", 19.0);
+        put("DEF", 19.0);
+        put("HP%", 3.9);
+        put("ATK%", 3.9);
+        put("DEF%", 4.9);
+        put("Break Effect%", 5.8);
+        put("Effect Hit Rate%", 3.9);
+        put("Effect RES%", 3.9);
+        put("CRIT Rate%" , 2.9);
+        put("CRIT DMG%" , 5.8);
+    }};
     private Map<String, Double> weights;
-    private Map<String, Double> avgRolls;
     private List<String> characters;
     private String element;
     private String path;
 
     public DamageDealer(String name) {
         this.name = name;
-        this.weights = new HashMap<String, Double>();
-        this.avgRolls = new HashMap<String, Double>();
-        this.characters = new ArrayList<String>();
+        setChars();
+        this.weights = new HashMap<String, Double>() {{
+            put("SPD", 0.0);
+            put("HP", 0.0);
+            put("ATK", 0.0);
+            put("DEF", 0.0);
+            put("HP%", 0.0);
+            put("ATK%", 0.0);
+            put("DEF%", 0.0);
+            put("Break Effect%", 0.0);
+            put("Effect Hit Rate%", 0.0);
+            put("Effect RES%", 0.0);
+            put("CRIT Rate%" , 0.0);
+            put("CRIT DMG%" , 0.0);
+        }};
+        setWeights();
     }
 
     @Override
@@ -48,12 +74,19 @@ public class DamageDealer extends CharacterType {
 
     @Override
     public List<String> getCharacters() {
+        return this.characters;
+    }
+
+    private void setChars() {
         List<String> list = Arrays.asList("Acheron", "DHIL", "Jingliu", "Dr. Ratio", 
                                                 "Clara", "Jing Yuan", "Qingque", "Seele", 
                                                 "Blade", "Argenti", "Himeko", "Misha",
                                                 "Serval", "Dan Heng", "Herta", "Hook", 
                                                 "Yanqing", "Arlan", "DMC");
         this.characters.addAll(list);
-        return this.characters;
+    }
+
+    private void setWeights() {
+
     }
 }

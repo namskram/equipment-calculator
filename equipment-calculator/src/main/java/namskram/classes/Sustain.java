@@ -7,18 +7,48 @@ import java.util.List;
 import java.util.Map;
 
 public class Sustain extends CharacterType {
-    private String name;
+    private final String name;
+    private final Map<String, Double> avgRolls = new HashMap<String, Double>() {{
+        put("SPD", 2.3);
+        put("HP", 38.0);
+        put("ATK", 19.0);
+        put("DEF", 19.0);
+        put("HP%", 3.9);
+        put("ATK%", 3.9);
+        put("DEF%", 4.9);
+        put("Break Effect%", 5.8);
+        put("Effect Hit Rate%", 3.9);
+        put("Effect RES%", 3.9);
+        put("CRIT Rate%" , 2.9);
+        put("CRIT DMG%" , 5.8);
+    }};
     private Map<String, Double> weights;
-    private Map<String, Double> avgRolls;
+    private Map<String, String> types;
     private List<String> characters;
     private String element;
     private String path;
+    private String type;
 
     public Sustain(String name) {
         this.name = name;
-        this.weights = new HashMap<String, Double>();
-        this.avgRolls = new HashMap<String, Double>();
-        this.characters = new ArrayList<String>();
+        setChars();
+        setTypes();
+        setType(name);
+        this.weights = new HashMap<String, Double>() {{
+            put("SPD", 0.0);
+            put("HP", 0.0);
+            put("ATK", 0.0);
+            put("DEF", 0.0);
+            put("HP%", 0.0);
+            put("ATK%", 0.0);
+            put("DEF%", 0.0);
+            put("Break Effect%", 0.0);
+            put("Effect Hit Rate%", 0.0);
+            put("Effect RES%", 0.0);
+            put("CRIT Rate%" , 0.0);
+            put("CRIT DMG%" , 0.0);
+        }};
+        setWeights();
     }
 
     @Override
@@ -46,12 +76,53 @@ public class Sustain extends CharacterType {
         return this.path;
     }
 
+    public String getType() {
+        return this.type;
+    }
+
+    public Map<String, String> getTypes() {
+        return this.types;
+    }
+
     @Override
     public List<String> getCharacters() {
+        return this.characters;
+    }
+
+    private void setTypes() {
+        this.types = new HashMap<String, String>() {{
+            put("Aventurine", "Shield");
+            put("Fu Xuan", "Heal");
+            put("Gallagher", "Heal");
+            put("Huohuo", "Heal");
+            put("Luocha", "Heal");
+            put("Bailu", "Heal");
+            put("Gepard", "Shield");
+            put("Lynx", "Heal");
+            put("March 7th", "Shield");
+            put("Natasha", "Heal");
+        }};
+    }
+
+    private void setType(String charName) {
+        this.type = types.get(charName);
+    }
+
+    private void setChars() {
         List<String> list = Arrays.asList("Aventurine", "Fu Xuan", "Gallagher",
                                                 "Huohuo", "Luocha", "Bailu", "Gepard",
                                                 "Lynx", "March 7th", "Natasha");
         this.characters.addAll(list);
-        return this.characters;
     }
+
+    private void setWeights() {
+        if (this.type == "Heal") {
+
+        }
+        if (this.type == "Shield") {
+
+        }
+    }
+    
+
 }
