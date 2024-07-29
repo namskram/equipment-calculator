@@ -12,8 +12,8 @@ import java.util.Map;
 
 public abstract class CharacterType {
     private String name;
-    private Map<String, Double> weights;
     private Map<String, Double> avgRolls;
+    private Map<String, Double> weights;
     private List<String> characters;
     private String element;
     private String path;

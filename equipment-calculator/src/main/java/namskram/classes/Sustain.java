@@ -22,7 +22,20 @@ public class Sustain extends CharacterType {
         put("CRIT Rate%" , 2.9);
         put("CRIT DMG%" , 5.8);
     }};
-    private Map<String, Double> weights;
+    private Map<String, Double> weights = new HashMap<String, Double>() {{
+        put("SPD", 0.0);
+        put("HP", 0.0);
+        put("ATK", 0.0);
+        put("DEF", 0.0);
+        put("HP%", 0.0);
+        put("ATK%", 0.0);
+        put("DEF%", 0.0);
+        put("Break Effect%", 0.0);
+        put("Effect Hit Rate%", 0.0);
+        put("Effect RES%", 0.0);
+        put("CRIT Rate%" , 0.0);
+        put("CRIT DMG%" , 0.0);
+    }};
     private Map<String, String> types;
     private List<String> characters;
     private String element;
@@ -34,20 +47,6 @@ public class Sustain extends CharacterType {
         setChars();
         setTypes();
         setType(name);
-        this.weights = new HashMap<String, Double>() {{
-            put("SPD", 0.0);
-            put("HP", 0.0);
-            put("ATK", 0.0);
-            put("DEF", 0.0);
-            put("HP%", 0.0);
-            put("ATK%", 0.0);
-            put("DEF%", 0.0);
-            put("Break Effect%", 0.0);
-            put("Effect Hit Rate%", 0.0);
-            put("Effect RES%", 0.0);
-            put("CRIT Rate%" , 0.0);
-            put("CRIT DMG%" , 0.0);
-        }};
         setWeights();
     }
 
@@ -116,11 +115,23 @@ public class Sustain extends CharacterType {
     }
 
     private void setWeights() {
-        if (this.type == "Heal") {
-
+        if ("Heal".equals(this.type)) {
+            weights.put("SPD", 1.0);
+            weights.put("HP%", 1.0);
+            weights.put("DEF%", 1.0);
+            weights.put("HP", 1.0);
+            weights.put("Break Effect%", 0.5);
+            weights.put("Effect RES%", 0.5);
+            weights.put("DEF", 0.5);
         }
-        if (this.type == "Shield") {
-
+        if ("Shield".equals(this.type)) {
+            weights.put("SPD", 1.0);
+            weights.put("HP%", 1.0);
+            weights.put("DEF%", 1.0);
+            weights.put("DEF", 1.0);
+            weights.put("Break Effect%", 0.5);
+            weights.put("Effect RES%", 0.5);
+            weights.put("HP", 0.5);
         }
     }
     

@@ -22,7 +22,20 @@ public class DamageDealer extends CharacterType {
         put("CRIT Rate%" , 2.9);
         put("CRIT DMG%" , 5.8);
     }};
-    private Map<String, Double> weights;
+    private Map<String, Double> weights = new HashMap<String, Double>() {{
+        put("SPD", 0.0);
+        put("HP", 0.0);
+        put("ATK", 0.0);
+        put("DEF", 0.0);
+        put("HP%", 0.0);
+        put("ATK%", 0.0);
+        put("DEF%", 0.0);
+        put("Break Effect%", 0.0);
+        put("Effect Hit Rate%", 0.0);
+        put("Effect RES%", 0.0);
+        put("CRIT Rate%" , 0.0);
+        put("CRIT DMG%" , 0.0);
+    }};;
     private List<String> characters;
     private String element;
     private String path;
@@ -30,20 +43,6 @@ public class DamageDealer extends CharacterType {
     public DamageDealer(String name) {
         this.name = name;
         setChars();
-        this.weights = new HashMap<String, Double>() {{
-            put("SPD", 0.0);
-            put("HP", 0.0);
-            put("ATK", 0.0);
-            put("DEF", 0.0);
-            put("HP%", 0.0);
-            put("ATK%", 0.0);
-            put("DEF%", 0.0);
-            put("Break Effect%", 0.0);
-            put("Effect Hit Rate%", 0.0);
-            put("Effect RES%", 0.0);
-            put("CRIT Rate%" , 0.0);
-            put("CRIT DMG%" , 0.0);
-        }};
         setWeights();
     }
 
@@ -87,6 +86,11 @@ public class DamageDealer extends CharacterType {
     }
 
     private void setWeights() {
-
+        weights.put("CRIT Rate%", 1.0);
+        weights.put("CRIT DMG%", 1.0);
+        weights.put("SPD", 1.0);
+        weights.put("ATK%", 1.0);
+        weights.put("ATK", 0.5);
+        weights.put("Break Effect%", 0.5);
     }
 }
