@@ -56,7 +56,8 @@ public class Extracter {
             // System.out.println("Original:");
             // System.out.println(text);
             
-            String[] keywords = {"ATK", "DEF", "CRIT DMG", "Break Effect", "CRIT Rate"};
+            String[] keywords = {"ATK", "DEF", "HP", "CRIT DMG", "CRIT Rate", "Break Effect", 
+                                "Effect Hit Rate", "Effect RES", "SPD"};
             String filteredText = includeStringsWithPercentage(text, keywords);
 
             System.out.println("Overall Stats:");
@@ -127,14 +128,19 @@ public class Extracter {
         String[] lines = filteredText.split("\\n");
         
         for (String line : lines) {
-            // System.out.println("Processing line: " + line); // Debug print
+            System.out.println("Processing line: " + line); // Debug print
             int lastSpaceIndex = line.lastIndexOf(' ');
             if (lastSpaceIndex == -1) {
                 System.err.println("No space found in line: " + line); // Debug print
                 continue;
             }
             String key = line.substring(0, lastSpaceIndex).trim();
-            String valueStr = line.substring(lastSpaceIndex + 1).replace("%", ""); // Remove percentage sign if present
+            String valueStr = line.substring(lastSpaceIndex + 1).trim();
+            boolean isPercentage = valueStr.endsWith("%");
+            if (isPercentage) {
+                valueStr = valueStr.substring(0, valueStr.length() - 1); // Remove percentage sign
+                key += "%"; // Append percentage sign to key
+            }
             try {
                 double value = Double.parseDouble(valueStr);
                 resultMap.put(key, value);
