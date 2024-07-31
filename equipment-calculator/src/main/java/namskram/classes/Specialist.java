@@ -1,6 +1,5 @@
 package namskram.classes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +47,9 @@ public class Specialist extends CharacterType {
         setTypes();
         setType(name);
         setWeights();
+
+        // FOR DEBUGGING
+        System.out.println("Initializing Specialist: " + name);
     }
 
     @Override
@@ -83,9 +85,11 @@ public class Specialist extends CharacterType {
         return this.types;
     }
 
-    @Override
-    public List<String> getCharacters() {
-        return this.characters;
+    public static List<String> getChars() {
+        List<String> list = Arrays.asList("Firefly", "Black Swan", "Boothill", "Kafka", 
+                                                "Topaz", "Luka", "Sampo", "Xueyi", "Guinafen",
+                                                "Jade", "Welt", "Sushang", "PMC");
+        return list;
     }
 
     private void setTypes() {
@@ -111,10 +115,7 @@ public class Specialist extends CharacterType {
     }
 
     private void setChars() {
-        List<String> list = Arrays.asList("Firefly", "Black Swan", "Boothill", "Kafka", 
-                                                "Topaz", "Luka", "Sampo", "Xueyi", "Guinafen",
-                                                "Jade", "Welt", "Sushang", "PMC");
-        this.characters.addAll(list);
+        this.characters = getChars();
     }
 
     private void setWeights() {

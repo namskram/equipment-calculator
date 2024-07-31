@@ -4,7 +4,12 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +27,11 @@ import net.sourceforge.tess4j.TesseractException;
 
 public class Extracter {
 
-    public static void ExtractTextAndNumbers(String filePath) throws IOException {
+    public static void ExtractTextAndNumbers(String charName, String filePath) 
+                                            throws IOException, NoSuchMethodException, ClassNotFoundException, 
+                                            InstantiationException, IllegalAccessException, 
+                                            IllegalArgumentException, InvocationTargetException {
+
         File imageFile = new File(filePath);
 
         int newWidth = 600;
@@ -52,21 +61,29 @@ public class Extracter {
             String text = tesseract.doOCR(newImage);
 
             // FOR DEBUGGING
-            // System.out.println("Original:");
-            // System.out.println(text);
+            System.out.println("Original:");
+            System.out.println(text);
             
             String[] keywords = {"ATK", "DEF", "HP", "CRIT DMG", "CRIT Rate", "Break Effect", 
                                 "Effect Hit Rate", "Effect RES", "SPD"};
             String filteredText = includeStringsWithPercentage(text, keywords);
 
+            // FOR DEBUGGING
             System.out.println("Overall Stats:");
             System.out.println(filteredText);
             System.out.println();
 
+            /*
             Map<String, Double> vals = filteredTextToDictionary(filteredText);
             // Ignore main stats, assuming BIS already
             Map<String, Double> newVals = removeFirstPair(vals);
+
+            // FOR DEBUGGING
             System.out.println("test: " + newVals);
+
+            Double score = calculateScores(charName, newVals);
+            System.out.println("Relic Score: " + score);
+            */
 
         } catch (TesseractException e) {
             System.err.println("Error during OCR: " + e.getMessage());
@@ -99,23 +116,19 @@ public class Extracter {
     }
 
     public static String classChecker(String charName) {
-        CharacterType tempDD = new DamageDealer(charName);
-        if (tempDD.getCharacters().contains(charName)) {
+        if (DamageDealer.getChars().contains(charName)) {
             return "DamageDealer";
         }
         
-        CharacterType tempSpec = new Specialist(charName);
-        if (tempSpec.getCharacters().contains(charName)) {
+        if (Specialist.getChars().contains(charName)) {
             return "Specialist";
         }
 
-        CharacterType tempAmp = new Amplifier(charName);
-        if (tempAmp.getCharacters().contains(charName)) {
+        if (Amplifier.getChars().contains(charName)) {
             return "Amplifier";
         }
 
-        CharacterType tempSus = new Sustain(charName);
-        if (tempSus.getCharacters().contains(charName)) {
+        if (Sustain.getChars().contains(charName)) {
             return "Sustain";
         }
         return "No such character";
@@ -127,10 +140,12 @@ public class Extracter {
         String[] lines = filteredText.split("\\n");
         
         for (String line : lines) {
-            System.out.println("Processing line: " + line); // Debug print
+            // FOR DEBUGGING
+            // System.out.println("Processing line: " + line);
             int lastSpaceIndex = line.lastIndexOf(' ');
             if (lastSpaceIndex == -1) {
-                System.err.println("No space found in line: " + line); // Debug print
+                // FOR DEBUGGING
+                System.err.println("No space found in line: " + line);
                 continue;
             }
             String key = line.substring(0, lastSpaceIndex).trim();
@@ -163,6 +178,52 @@ public class Extracter {
             newMap.put(entry.getKey(), entry.getValue());
         }
         return newMap;
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public static double calculateScores(String charName, Map<String, Double> stats) 
+                                              throws NoSuchMethodException, ClassNotFoundException, InstantiationException, 
+                                              IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        
+        String classType = classChecker(charName);
+        // FOR DEBUGGING
+        System.out.println("class type: " + classType);
+
+        String className = "namskram.classes." + classType;
+        Class cl = Class.forName(className);
+
+        Method m1 = cl.getMethod("getWeights");
+        Method m2 = cl.getMethod("getAvgRolls");
+
+        Constructor con = cl.getConstructor(String.class);
+        Object charObject = con.newInstance(charName);
+
+        Double score = 0.0;
+        Map<String, Double> weights = (Map<String, Double>)m1.invoke(charObject);
+        Map<String, Double> rolls = (Map<String, Double>)m2.invoke(charObject);
+
+        // FOR DEBUGGING
+        /*
+        System.out.println("Weights:");
+        for (Map.Entry<String, Double> entry: weights.entrySet()) {
+            System.out.println(entry.getKey() + ", " + entry.getValue());
+        }
+        System.out.println();
+        System.out.println("Avg Rolls:");
+        for (Map.Entry<String, Double> entry: rolls.entrySet()) {
+            System.out.println(entry.getKey() + ", " + entry.getValue());
+        }
+        */
+
+        for (Map.Entry<String, Double> entry: stats.entrySet()) {
+            String stat = entry.getKey();
+            Double val = entry.getValue();
+            Double weight = weights.get(stat);
+            Double roll = rolls.get(stat);
+            score += ((val/roll) * weight);
+        }
+
+        return score;
     }
 
 }

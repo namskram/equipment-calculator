@@ -38,7 +38,5 @@ public abstract class CharacterType {
         return this.path;
     }
 
-    public List<String> getCharacters() {
-        return this.characters;
-    }
+
 }

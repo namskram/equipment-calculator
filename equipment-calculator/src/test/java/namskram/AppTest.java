@@ -2,6 +2,7 @@ package namskram;
 
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,10 +17,17 @@ public class AppTest
 {
     /**
      * Rigorous Test :-)
+     * @throws InvocationTargetException 
+     * @throws IllegalArgumentException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws ClassNotFoundException 
+     * @throws NoSuchMethodException 
      */
     @Test
-    public void testTestImage() throws IOException {
+    public void testTestImage() throws IOException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         String filename = "C:/Users/Brandon Du/OneDrive/Pictures/test-image.png";
-        ExtractTextAndNumbers(filename);
+        String charName = "Firefly";
+        ExtractTextAndNumbers(charName, filename);
     }
 }

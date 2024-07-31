@@ -48,6 +48,9 @@ public class Sustain extends CharacterType {
         setTypes();
         setType(name);
         setWeights();
+
+        // FOR DEBUGGING
+        System.out.println("Initializing Sustain: " + name);
     }
 
     @Override
@@ -83,9 +86,11 @@ public class Sustain extends CharacterType {
         return this.types;
     }
 
-    @Override
-    public List<String> getCharacters() {
-        return this.characters;
+    public static List<String> getChars() {
+        List<String> list = Arrays.asList("Aventurine", "Fu Xuan", "Gallagher",
+                                                "Huohuo", "Luocha", "Bailu", "Gepard",
+                                                "Lynx", "March 7th", "Natasha");
+        return list;
     }
 
     private void setTypes() {
@@ -108,10 +113,7 @@ public class Sustain extends CharacterType {
     }
 
     private void setChars() {
-        List<String> list = Arrays.asList("Aventurine", "Fu Xuan", "Gallagher",
-                                                "Huohuo", "Luocha", "Bailu", "Gepard",
-                                                "Lynx", "March 7th", "Natasha");
-        this.characters.addAll(list);
+        this.characters = getChars();
     }
 
     private void setWeights() {
@@ -124,6 +126,7 @@ public class Sustain extends CharacterType {
             weights.put("Effect RES%", 0.5);
             weights.put("DEF", 0.5);
         }
+        
         if ("Shield".equals(this.type)) {
             weights.put("SPD", 1.0);
             weights.put("HP%", 1.0);

@@ -44,6 +44,9 @@ public class DamageDealer extends CharacterType {
         this.name = name;
         setChars();
         setWeights();
+
+        // FOR DEBUGGING
+        System.out.println("Initializing Damage Dealer: " + name);
     }
 
     @Override
@@ -71,18 +74,18 @@ public class DamageDealer extends CharacterType {
         return this.path;
     }
 
-    @Override
-    public List<String> getCharacters() {
-        return this.characters;
-    }
-
-    private void setChars() {
+    public static List<String> getChars() {
         List<String> list = Arrays.asList("Acheron", "DHIL", "Jingliu", "Dr. Ratio", 
                                                 "Clara", "Jing Yuan", "Qingque", "Seele", 
                                                 "Blade", "Argenti", "Himeko", "Misha",
                                                 "Serval", "Dan Heng", "Herta", "Hook", 
                                                 "Yanqing", "Arlan", "DMC");
-        this.characters.addAll(list);
+        return list;
+    }
+
+    private void setChars() {
+        this.characters = getChars();
+        
     }
 
     private void setWeights() {

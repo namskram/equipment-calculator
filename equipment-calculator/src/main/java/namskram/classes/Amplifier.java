@@ -48,6 +48,9 @@ public class Amplifier extends CharacterType {
         setTypes();
         setType(name);
         setWeights();
+
+        // FOR DEBUGGING
+        System.out.println("Initializing Amplifier: " + name);
     }
 
     @Override
@@ -83,9 +86,11 @@ public class Amplifier extends CharacterType {
         return this.types;
     }
 
-    @Override
-    public List<String> getCharacters() {
-        return this.characters;
+    public static List<String> getChars() {
+        List<String> list = Arrays.asList("Ruan Mei", "Robin", "Sparkle", "HMC", 
+                                                "Tingyun", "Bronya", "Pela", "Silver Wolf",
+                                                "Asta", "Hanya", "Yukong");
+        return list;
     }
 
     private void setTypes() {
@@ -109,10 +114,7 @@ public class Amplifier extends CharacterType {
     }
 
     private void setChars() {
-        List<String> list = Arrays.asList("Ruan Mei", "Robin", "Sparkle", "HMC", 
-                                                "Tingyun", "Bronya", "Pela", "Silver Wolf",
-                                                "Asta", "Hanya", "Yukong");
-        this.characters.addAll(list);
+        this.characters = getChars();
     }
 
     private void setWeights() {
