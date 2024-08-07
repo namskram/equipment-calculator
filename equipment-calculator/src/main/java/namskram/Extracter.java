@@ -1,6 +1,7 @@
 package namskram;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
 import namskram.classes.Amplifier;
-import namskram.classes.CharacterType;
 import namskram.classes.DamageDealer;
 import namskram.classes.Specialist;
 import namskram.classes.Sustain;
@@ -32,29 +32,9 @@ public class Extracter {
                                             InstantiationException, IllegalAccessException, 
                                             IllegalArgumentException, InvocationTargetException {
 
-        File imageFile = new File(filePath);
 
-        int newWidth = 600;
-        int newHeight = 500;
-        
-        // Resize the image so Tesseract can read it more accurately
-        BufferedImage originalImage = ImageIO.read(imageFile);
-
-        // Create a new BufferedImage for resized image
-        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = resizedImage.createGraphics();
-
-        // Draw the original image onto the resized image
-        g2d.drawImage(originalImage, 0, 0, newWidth, newHeight, null);
-        g2d.dispose();
-
-        int pos = filePath.length() - 4;
-        String newFile = filePath.substring(0, pos) + "2" 
-                         + filePath.substring(pos);
-
-        // Write the resized image to a file
-        File newImage = new File(newFile);
-        ImageIO.write(resizedImage, "png", newImage);
+        String newFilePath = ImagePreprocessing.modifyImage(filePath);
+        File newImage = new File(newFilePath);
 
         ITesseract tesseract = new Tesseract();
         try {
