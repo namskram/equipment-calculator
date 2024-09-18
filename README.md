@@ -21,7 +21,7 @@ After inputting the image, the equipment calculator will provide detailed inform
 
 ![Output](https://github.com/namskram/equipment-calculator/blob/main/equipment-calculator/src/main/resources/output1.png)
 
-Relic scores are based off of the MobileMeta Relic Score tool, and a score of about 15 is ideal for any given character.
+Relic weightings are scaled off of the MobileMeta Relic Score tool, and a score of about 15 is ideal for any given character.
 
 ![Output 2](https://github.com/namskram/equipment-calculator/blob/main/equipment-calculator/src/main/resources/output2.png)
 
